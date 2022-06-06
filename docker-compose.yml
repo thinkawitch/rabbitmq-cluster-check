@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+
+  rabbit1:
+    image: rabbitmq:3.10.5-alpine
+    environment:
+      #- RABBITMQ_NODE_IP_ADDRESS=192.168.88.91
+      - RABBITMQ_NODENAME=${RABBIT_1_NODENAME}
+      - RABBITMQ_USE_LONGNAME=true
+      # deprecated
+      #- RABBITMQ_ERLANG_COOKIE=VFAMRUXUBZIMHPTCNQUP
+    ports:
+      - "${RABBIT_1_IP}:4369:4369" # 4369: epmd, a peer discovery service used by RabbitMQ nodes and CLI tools
+      - "${RABBIT_1_IP}:5671:5671"
+      - "${RABBIT_1_IP}:5672:5672" # 5672, 5671: used by AMQP 0-9-1 and AMQP 1.0 clients without and with TLS
+      - "${RABBIT_1_IP}:25672:25672" # 25672: used for inter-node and CLI tools communication
+      - "${RABBIT_1_IP}:15672:15672" # 15672, 15671: HTTP API clients, management UI and rabbitmqadmin, without and with TLS (only if the management plugin is enabled)
+      - "${RABBIT_1_IP}:15692:15692" # 15692: Prometheus metrics (only if the Prometheus plugin is enabled)
+    volumes:
+      - ./config/.erlang.cookie:/var/lib/rabbitmq/.erlang.cookie
+      - ./config/enabled_plugins:/etc/rabbitmq/enabled_plugins
+
+  rabbit2:
+    image: rabbitmq:3.10.5-alpine
+    environment:
+      - RABBITMQ_NODENAME=${RABBIT_2_NODENAME}
+      - RABBITMQ_USE_LONGNAME=true
+      - RABBIT_1_NODENAME
+    ports:
+      - "${RABBIT_2_IP}:4369:4369" # 4369: epmd, a peer discovery service used by RabbitMQ nodes and CLI tools
+      - "${RABBIT_2_IP}:5671:5671"
+      - "${RABBIT_2_IP}:5672:5672" # 5672, 5671: used by AMQP 0-9-1 and AMQP 1.0 clients without and with TLS
+      - "${RABBIT_2_IP}:25672:25672" # 25672: used for inter-node and CLI tools communication
+      - "${RABBIT_2_IP}:15672:15672" # 15672, 15671: HTTP API clients, management UI and rabbitmqadmin, without and with TLS (only if the management plugin is enabled)
+      - "${RABBIT_2_IP}:15692:15692" # 15692: Prometheus metrics (only if the Prometheus plugin is enabled)
+    volumes:
+      - ./config/.erlang.cookie:/var/lib/rabbitmq/.erlang.cookie
+      - ./config/enabled_plugins:/etc/rabbitmq/enabled_plugins
+
+  rabbit3:
+    image: rabbitmq:3.10.5-alpine
+    environment:
+      - RABBITMQ_NODENAME=${RABBIT_3_NODENAME}
+      - RABBITMQ_USE_LONGNAME=true
+      - RABBIT_1_NODENAME
+    ports:
+      - "${RABBIT_3_IP}:4369:4369" # 4369: epmd, a peer discovery service used by RabbitMQ nodes and CLI tools
+      - "${RABBIT_3_IP}:5671:5671"
+      - "${RABBIT_3_IP}:5672:5672" # 5672, 5671: used by AMQP 0-9-1 and AMQP 1.0 clients without and with TLS
+      - "${RABBIT_3_IP}:25672:25672" # 25672: used for inter-node and CLI tools communication
+      - "${RABBIT_3_IP}:15672:15672" # 15672, 15671: HTTP API clients, management UI and rabbitmqadmin, without and with TLS (only if the management plugin is enabled)
+      - "${RABBIT_3_IP}:15692:15692" # 15692: Prometheus metrics (only if the Prometheus plugin is enabled)
+    volumes:
+      - ./config/.erlang.cookie:/var/lib/rabbitmq/.erlang.cookie
+      - ./config/enabled_plugins:/etc/rabbitmq/enabled_plugins
+
+#  haproxy:
+#    image: haproxy:2.6.0-alpine
+

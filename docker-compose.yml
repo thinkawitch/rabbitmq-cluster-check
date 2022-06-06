@@ -20,6 +20,7 @@ services:
     volumes:
       - ./config/.erlang.cookie:/var/lib/rabbitmq/.erlang.cookie
       - ./config/enabled_plugins:/etc/rabbitmq/enabled_plugins
+      - ./config/zz-custom-params.conf:/etc/rabbitmq/conf.d/zz-custom-params.conf
 
   rabbit2:
     image: rabbitmq:3.10.5-alpine
@@ -37,6 +38,7 @@ services:
     volumes:
       - ./config/.erlang.cookie:/var/lib/rabbitmq/.erlang.cookie
       - ./config/enabled_plugins:/etc/rabbitmq/enabled_plugins
+      - ./config/zz-custom-params.conf:/etc/rabbitmq/conf.d/zz-custom-params.conf
 
   rabbit3:
     image: rabbitmq:3.10.5-alpine
@@ -54,6 +56,7 @@ services:
     volumes:
       - ./config/.erlang.cookie:/var/lib/rabbitmq/.erlang.cookie
       - ./config/enabled_plugins:/etc/rabbitmq/enabled_plugins
+      - ./config/zz-custom-params.conf:/etc/rabbitmq/conf.d/zz-custom-params.conf
 
 #  haproxy:
 #    image: haproxy:2.6.0-alpine

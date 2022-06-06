@@ -1,6 +1,6 @@
 # RabbitMQ checks
 
-### Setup the cluster
+### Set up the cluster
 
 #### 1. erlang cookie for cluster
 Edit and set correct permissions.
@@ -22,12 +22,14 @@ restart docker
 ```bash
 docker-compose exec rabbit2 bash
 rabbitmqctl stop_app
+rabbitmqctl reset
 rabbitmqctl join_cluster ${RABBIT_1_NODENAME}
 rabbitmqctl start_app
 ```
 ```bash
 docker-compose exec rabbit3 bash
 rabbitmqctl stop_app
+rabbitmqctl reset
 rabbitmqctl join_cluster ${RABBIT_1_NODENAME}
 rabbitmqctl start_app
 ```

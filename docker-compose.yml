@@ -18,9 +18,9 @@ services:
       - "${RABBIT_1_IP}:15672:15672" # 15672, 15671: HTTP API clients, management UI and rabbitmqadmin, without and with TLS (only if the management plugin is enabled)
       - "${RABBIT_1_IP}:15692:15692" # 15692: Prometheus metrics (only if the Prometheus plugin is enabled)
     volumes:
-      - ./config/.erlang.cookie:/var/lib/rabbitmq/.erlang.cookie
-      - ./config/enabled_plugins:/etc/rabbitmq/enabled_plugins
-      - ./config/zz-custom-params.conf:/etc/rabbitmq/conf.d/zz-custom-params.conf
+      - ./docker-containers/rabbitmq/.erlang.cookie:/var/lib/rabbitmq/.erlang.cookie
+      - ./docker-containers/rabbitmq/enabled_plugins:/etc/rabbitmq/enabled_plugins
+      - ./docker-containers/rabbitmq/zz-custom-params.conf:/etc/rabbitmq/conf.d/zz-custom-params.conf
 
   rabbit2:
     image: rabbitmq:3.10.5-alpine
@@ -36,9 +36,9 @@ services:
       - "${RABBIT_2_IP}:15672:15672" # 15672, 15671: HTTP API clients, management UI and rabbitmqadmin, without and with TLS (only if the management plugin is enabled)
       - "${RABBIT_2_IP}:15692:15692" # 15692: Prometheus metrics (only if the Prometheus plugin is enabled)
     volumes:
-      - ./config/.erlang.cookie:/var/lib/rabbitmq/.erlang.cookie
-      - ./config/enabled_plugins:/etc/rabbitmq/enabled_plugins
-      - ./config/zz-custom-params.conf:/etc/rabbitmq/conf.d/zz-custom-params.conf
+      - ./docker-containers/rabbitmq/.erlang.cookie:/var/lib/rabbitmq/.erlang.cookie
+      - ./docker-containers/rabbitmq/enabled_plugins:/etc/rabbitmq/enabled_plugins
+      - ./docker-containers/rabbitmq/zz-custom-params.conf:/etc/rabbitmq/conf.d/zz-custom-params.conf
 
   rabbit3:
     image: rabbitmq:3.10.5-alpine
@@ -54,10 +54,13 @@ services:
       - "${RABBIT_3_IP}:15672:15672" # 15672, 15671: HTTP API clients, management UI and rabbitmqadmin, without and with TLS (only if the management plugin is enabled)
       - "${RABBIT_3_IP}:15692:15692" # 15692: Prometheus metrics (only if the Prometheus plugin is enabled)
     volumes:
-      - ./config/.erlang.cookie:/var/lib/rabbitmq/.erlang.cookie
-      - ./config/enabled_plugins:/etc/rabbitmq/enabled_plugins
-      - ./config/zz-custom-params.conf:/etc/rabbitmq/conf.d/zz-custom-params.conf
+      - ./docker-containers/rabbitmq/.erlang.cookie:/var/lib/rabbitmq/.erlang.cookie
+      - ./docker-containers/rabbitmq/enabled_plugins:/etc/rabbitmq/enabled_plugins
+      - ./docker-containers/rabbitmq/zz-custom-params.conf:/etc/rabbitmq/conf.d/zz-custom-params.conf
 
-#  haproxy:
-#    image: haproxy:2.6.0-alpine
-
+  haproxy:
+    image: haproxy:2.6.0-alpine
+    ports:
+      - "${HAPROXY_IP}:5672:5672"
+    volumes:
+      - ./docker-containers/haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg

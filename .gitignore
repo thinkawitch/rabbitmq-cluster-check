@@ -1,4 +1,6 @@
 .idea
 .env
 config/.erlang.cookie
+docker-containers/rabbitmq/.erlang.cookie
+docker-containers/haproxy/haproxy.cfg
 clients/**/vendor

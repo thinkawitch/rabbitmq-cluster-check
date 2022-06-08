@@ -1,0 +1,23 @@
+defaults
+log 127.0.0.1 local0
+option tcplog
+
+frontend rabbit_frontend
+mode tcp
+bind :5672
+log global
+option tcplog
+option logasap
+option clitcpka
+timeout client  3h
+default_backend rabbit_backend
+
+backend rabbit_backend
+mode tcp
+balance roundrobin
+timeout connect 2s
+timeout server  3h
+default-server check inter 5s rise 2 fall 3
+server rabbit_app01 192.168.88.91:5672
+server rabbit_app02 192.168.88.92:5672
+server rabbit_app03 192.168.88.94:5672

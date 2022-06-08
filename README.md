@@ -1,5 +1,7 @@
 # RabbitMQ checks
 
+[The reports](reports.md)
+
 ### Set up the cluster
 
 #### 1. erlang cookie for cluster
@@ -37,4 +39,12 @@ default user: guest / guest
 Make cfg file copy and update.
 ```bash
 cp ./docker-containers/haproxy/haproxy.cfg.dist ./docker-containers/haproxy/haproxy.cfg
+```
+
+
+#### 5. queue replication
+Enable queue replication between cluster nodes
+```bash
+docker-compose exec rabbit1 bash
+rabbitmqctl set_policy ha-all "" '{"ha-mode":"all","ha-sync-mode":"automatic"}'
 ```

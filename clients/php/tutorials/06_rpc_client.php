@@ -1,6 +1,6 @@
 <?php
 
-require_once '00_common.php';
+require_once __DIR__ . '/../00_common.php';
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 
@@ -14,10 +14,10 @@ class FibonacciRpcClient
 
     public function __construct()
     {
-        [$host, $user, $pass] = getHostUserPass();
+        [$host, $port, $user, $pass] = getRMQHostPortUserPass();
         $this->connection = new AMQPStreamConnection(
             $host,
-            5672,
+            $port,
             $user,
             $pass
         );

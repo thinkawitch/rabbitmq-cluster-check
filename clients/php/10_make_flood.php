@@ -4,14 +4,14 @@ require_once '00_common.php';
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 
-[$host, $user, $pass] = getHostUserPass();
+$mtStart = microtime(true);
 
-$connection = new AMQPStreamConnection($host, 5672, $user, $pass);
+[$host, $port, $user, $pass] = getRMQHostPortUserPass();
+
+$connection = new AMQPStreamConnection($host, $port, $user, $pass);
 $channel = $connection->channel();
 
 $channel->queue_declare('flood_queue', false, false, false, false);
-
-$mtStart = microtime(true);
 
 $limit = 1_000_000;
 for ($i=1; $i<=$limit; $i++) {
@@ -19,11 +19,10 @@ for ($i=1; $i<=$limit; $i++) {
     $channel->basic_publish($msg, '', 'flood_queue');
 }
 
+$channel->close();
+$connection->close();
+
 $mtEnd = microtime(true);
 $seconds = $mtEnd - $mtStart;
 
 echo " [x] Sent $limit messages in {$seconds} seconds\n";
-
-$channel->close();
-$connection->close();
-

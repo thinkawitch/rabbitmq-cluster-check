@@ -10,8 +10,16 @@ $log = function(...$args) {
     echo implode(' ', $args), "\n";
 };
 
-$onMessage = function(AMQPMessage $message) {
-    // Do whatever is needed
+$total = 0;
+$echoLimit = 1000;
+$echoCounter = 0;
+$onMessage = function(AMQPMessage $message) use ($log, &$total, $echoLimit, &$echoCounter) {
+    $total++;
+    $echoCounter++;
+    if ($echoCounter >= $echoLimit) {
+        $echoCounter = 0;
+        $log(' [x] Received', $total);
+    }
 };
 
 $connect = function(): AMQPStreamConnection {
@@ -42,4 +50,6 @@ rmqReconnectingReceiver(
     $log
 );
 
+
+$log(' [x] Total received ', $total);
 $log(' [x] Stop ');

@@ -29,14 +29,23 @@ $createChannel = function(AMQPStreamConnection $connection) use ($onMessage): AM
 };
 declare(ticks=1); // for better keyboard handling
 $limit = 1_000_000;
-$limit = 50_000;
+#$limit = 50_000;
 $sent = 0;
-$runLoop = function(AMQPStreamConnection $connection, AMQPChannel $channel) use ($limit, &$sent, $log): void {
+$echoLimit = 1000;
+$echoCounter = 0;
+$runLoop = function(AMQPStreamConnection $connection, AMQPChannel $channel) use ($limit, &$sent, $log, &$echoCounter, $echoLimit): void {
     for ($i=$sent; $i<$limit; $i++) {
         $msg = new AMQPMessage(uniqid('message-', true));
         $channel->basic_publish($msg, '', 'flood_queue');
         $sent++;
-        usleep(10); // give time for keyboard
+        if (true) {
+            $echoCounter++;
+            if ($echoCounter >= $echoLimit) {
+                $echoCounter = 0;
+                $log(' [x] Sent', $sent);
+            }
+            usleep(10); // give time for keyboard
+        }
     }
 };
 
@@ -52,5 +61,5 @@ rmqReconnectingSender(
 $mtEnd = microtime(true);
 $seconds = $mtEnd - $mtStart;
 
-$log(" [x] Sent $limit messages in $seconds seconds");
+$log(" [x] Sent $sent messages in $seconds seconds");
 $log(' [x] Stop ');

@@ -2,6 +2,15 @@
 
 [The reports](reports.md)
 
+### Run tests
+```bash
+cd ./clients/php
+# console 1
+php 12_reconnecting_sender.php
+# console 2
+php 12_reconnecting_receiver.php
+```
+
 ### Set up the cluster
 
 #### 1. erlang cookie for cluster

@@ -57,3 +57,12 @@ Enable queue replication between cluster nodes
 docker-compose exec rabbit1 bash
 rabbitmqctl set_policy ha-all "" '{"ha-mode":"all","ha-sync-mode":"automatic"}'
 ```
+
+### Notes
+
+Docker commands to test networks, `rabbitmq-cluster-check` is project folder
+```bash
+docker network inspect rabbitmq-cluster-check_default
+docker network disconnect rabbitmq-cluster-check_default rabbitmq-cluster-check_rabbit1_1
+docker network connect rabbitmq-cluster-check_default rabbitmq-cluster-check_rabbit1_1
+```

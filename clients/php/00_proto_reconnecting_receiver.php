@@ -1,5 +1,6 @@
 <?php
 use PhpAmqpLib\Exception\AMQPConnectionClosedException;
+use PhpAmqpLib\Exception\AMQPTimeoutException;
 
 // based on https://github.com/php-amqplib/php-amqplib/issues/444
 
@@ -63,6 +64,9 @@ function rmqReconnectingReceiver(
             } catch (AMQPConnectionClosedException $e) {
                 sleep(1);
                 $log(" [!] try to reconnect #$connectionAttempts in connect");
+            } catch (AMQPTimeoutException $e) {
+                sleep(1);
+                $log(" [!] try to reconnect #$connectionAttempts in connect, after timeout");
             } catch (\Exception $e) {
                 // Failed to get connection.
                 // Best practice is to catch the specific exceptions and handle accordingly.
